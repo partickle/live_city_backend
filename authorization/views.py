@@ -128,3 +128,16 @@ class DeleteAccountView(APIView):
     def post(self, request, *args, **kwargs):
         request.user.delete()
         return Response({"message": "Account deleted successfully."}, status=status.HTTP_200_OK)
+
+
+class AdminLoginAPIView(generics.GenericAPIView):
+    @swagger_auto_schema(request_body=LoginSerializer)
+    def post(self, request):
+        email = request.data.get('email')
+        password = request.data.get('password')
+
+        user = authenticate(request, username=email, password=password)
+        if user and user.is_staff:
+            return Response({"message": "Admin Logged In Successfully."}, status=status.HTTP_200_OK)
+
+        return Response({"message": "Invalid Credentials or Not an Admin"}, status=status.HTTP_401_UNAUTHORIZED)
