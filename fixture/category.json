@@ -1,0 +1,23 @@
+[
+  {
+    "model": "points.category",
+    "pk": 1,
+    "fields": {
+      "name": "Исторические"
+    }
+  },
+  {
+    "model": "points.category",
+    "pk": 2,
+    "fields": {
+      "name": "Культурные"
+    }
+  },
+  {
+    "model": "points.category",
+    "pk": 3,
+    "fields": {
+      "name": "Природные"
+    }
+  }
+]
