@@ -137,7 +137,12 @@ class AdminLoginAPIView(generics.GenericAPIView):
         password = request.data.get('password')
 
         user = authenticate(request, username=email, password=password)
+
         if user and user.is_staff:
-            return Response({"message": "Admin Logged In Successfully."}, status=status.HTTP_200_OK)
+            refresh = RefreshToken.for_user(user)
+            return Response({
+                "refresh": str(refresh),
+                "access": str(refresh.access_token),
+            }, status=status.HTTP_200_OK)
 
         return Response({"message": "Invalid Credentials or Not an Admin"}, status=status.HTTP_401_UNAUTHORIZED)
