@@ -43,6 +43,7 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 INSTALLED_APPS = [
     'authorization',
+    'points',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'rest_framework',

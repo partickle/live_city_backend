@@ -1,0 +1,112 @@
+[
+  {
+    "model": "points.point",
+    "pk": 1,
+    "fields": {
+      "name": "Площадь Ленина",
+      "latitude": 51.6602,
+      "longitude": 39.1962,
+      "exp": 10,
+      "category": 1
+    }
+  },
+  {
+    "model": "points.point",
+    "pk": 2,
+    "fields": {
+      "name": "Парк Победы",
+      "latitude": 51.6525,
+      "longitude": 39.2167,
+      "exp": 15,
+      "category": 1
+    }
+  },
+  {
+    "model": "points.point",
+    "pk": 3,
+    "fields": {
+      "name": "Костёлы Воронежа",
+      "latitude": 51.6642,
+      "longitude": 39.1881,
+      "exp": 12,
+      "category": 2
+    }
+  },
+  {
+    "model": "points.point",
+    "pk": 4,
+    "fields": {
+      "name": "Воронежский государственный цирк",
+      "latitude": 51.6666,
+      "longitude": 39.1899,
+      "exp": 20,
+      "category": 3
+    }
+  },
+  {
+    "model": "points.point",
+    "pk": 5,
+    "fields": {
+      "name": "Дворец культуры железнодорожников",
+      "latitude": 51.6704,
+      "longitude": 39.2008,
+      "exp": 18,
+      "category": 2
+    }
+  },
+  {
+    "model": "points.point",
+    "pk": 6,
+    "fields": {
+      "name": "Воронежский океанариум",
+      "latitude": 51.6495,
+      "longitude": 39.1932,
+      "exp": 25,
+      "category": 3
+    }
+  },
+  {
+    "model": "points.point",
+    "pk": 7,
+    "fields": {
+      "name": "Памятник Петру I",
+      "latitude": 51.6608,
+      "longitude": 39.2005,
+      "exp": 30,
+      "category": 1
+    }
+  },
+  {
+    "model": "points.point",
+    "pk": 8,
+    "fields": {
+      "name": "Соборная площадь",
+      "latitude": 51.6667,
+      "longitude": 39.1944,
+      "exp": 8,
+      "category": 2
+    }
+  },
+  {
+    "model": "points.point",
+    "pk": 9,
+    "fields": {
+      "name": "Воронежский музей изобразительных искусств",
+      "latitude": 51.6709,
+      "longitude": 39.1927,
+      "exp": 22,
+      "category": 3
+    }
+  },
+  {
+    "model": "points.point",
+    "pk": 10,
+    "fields": {
+      "name": "Площадь Революции",
+      "latitude": 51.6667,
+      "longitude": 39.1935,
+      "exp": 5,
+      "category": 1
+    }
+  }
+]
