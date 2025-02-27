@@ -34,7 +34,7 @@ DEBUG = True
 
 
 ALLOWED_HOSTS = ['*']
-
+CSRF_TRUSTED_ORIGINS = ['https://moistly-triumphant-cuttlefish.cloudpub.ru']
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 
@@ -43,6 +43,7 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 INSTALLED_APPS = [
     'authorization',
+    'stats',
     'points',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
