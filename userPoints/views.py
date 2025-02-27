@@ -1,3 +1,4 @@
+from django.utils import timezone
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -46,6 +47,8 @@ class UserPointListAPIView(generics.ListAPIView):
         responses={200: UserPointSerializer(many=True)}
     )
     def get(self, request, *args, **kwargs):
+        now = timezone.now()
+        UserPoint.objects.filter(end_time__lt=now).delete()
         is_active = request.query_params.get('is_active', None)
         if is_active is not None:
             is_active = is_active.lower() == 'true'
