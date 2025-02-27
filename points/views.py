@@ -1,5 +1,3 @@
-import logging
-
 from django.db import transaction
 from rest_framework import generics, status
 from rest_framework.views import APIView
@@ -10,7 +8,6 @@ from .serializers import CategorySerializer, PointSerializer, VisitedPointSerial
 from drf_yasg.utils import swagger_auto_schema
 from geopy.distance import geodesic
 
-logger = logging.getLogger(__name__)
 
 class CategoryListAPIView(generics.ListCreateAPIView):
     queryset = Category.objects.all()
@@ -80,16 +77,6 @@ class PointDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
         else:
             return Response({"detail": "You do not have permission to delete this point."},
                             status=status.HTTP_403_FORBIDDEN)
-
-
-class UserPointsAPIView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    @swagger_auto_schema(responses={200: PointSerializer(many=True)})
-    def get(self, request, *args, **kwargs):
-        points = Point.objects.filter(user=request.user)
-        serializer = PointSerializer(points, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class UserVisitedPointsAPIView(APIView):
