@@ -1,4 +1,7 @@
 from django.db import models
+from django.utils.timezone import now
+
+from authorization.models import User
 
 
 class Category(models.Model):
@@ -28,3 +31,15 @@ class Article(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class VisitedPoint(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    point = models.ForeignKey(Point, on_delete=models.CASCADE)
+    visit_date = models.DateTimeField(default=now)
+
+    class Meta:
+        unique_together = ('user', 'point')
+
+    def __str__(self):
+        return f"{self.user.email} - {self.point.name}"

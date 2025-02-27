@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Category, Point, Article
+from .models import Category, Point, Article, VisitedPoint
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -40,3 +40,15 @@ class ArticleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article
         fields = ['id', 'title', 'content', 'point']
+
+
+class CheckInSerializer(serializers.Serializer):
+    point_id = serializers.IntegerField()
+    latitude = serializers.DecimalField(max_digits=9, decimal_places=6)
+    longitude = serializers.DecimalField(max_digits=9, decimal_places=6)
+
+
+class VisitedPointSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VisitedPoint
+        fields = ["id", "user", "point", "visit_date"]
