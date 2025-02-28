@@ -16,6 +16,12 @@ class MyUserSerializer(serializers.ModelSerializer):
         return user
 
 
+class UserBlockSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['user_id', 'first_name', 'last_name', 'email', 'is_active']
+
+
 class SendVerificationCodeSerializer(serializers.Serializer):
     email = serializers.EmailField()
 
@@ -31,7 +37,6 @@ class ResetPasswordSerializer(serializers.Serializer):
 
 
 class LoginSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = User
         fields = ['email', 'password']

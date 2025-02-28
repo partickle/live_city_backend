@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from LiveCity import settings
 from .models import User
 from .serializers import (LoginSerializer, ResetPasswordSerializer, SendVerificationCodeSerializer,
-                          VerifyVerificationCodeSerializer, MyUserSerializer)
+                          VerifyVerificationCodeSerializer, MyUserSerializer, UserBlockSerializer)
 from rest_framework import generics, status
 from rest_framework.views import APIView
 from django.template.loader import render_to_string
@@ -146,3 +146,37 @@ class AdminLoginAPIView(generics.GenericAPIView):
             }, status=status.HTTP_200_OK)
 
         return Response({"message": "Invalid Credentials or Not an Admin"}, status=status.HTTP_401_UNAUTHORIZED)
+
+
+class UserListAPIView(generics.ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserBlockSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_superuser:
+            return Response({"detail": "You do not have permission to view this page."},
+                            status=status.HTTP_403_FORBIDDEN)
+        return super().get(request, *args, **kwargs)
+
+
+class UserDeactivateAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(
+        responses={200: "User deactivated", 403: "Permission denied", 404: "User not found"}
+    )
+    def post(self, request, user_id, *args, **kwargs):
+        if not request.user.is_superuser:
+            return Response({"detail": "You do not have permission to perform this action."},
+                            status=status.HTTP_403_FORBIDDEN)
+
+        try:
+            user = User.objects.get(id=user_id)
+        except User.DoesNotExist:
+            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        user.is_active = False
+        user.save()
+        return Response({"message": f"User {user.username} deactivated successfully."},
+                        status=status.HTTP_200_OK)
