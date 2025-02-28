@@ -3,8 +3,9 @@ from rest_framework import generics, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from .models import Category, Point, VisitedPoint
-from .serializers import CategorySerializer, PointSerializer, VisitedPointSerializer, CheckInSerializer
+from .models import Category, Point, VisitedPoint, Article
+from .serializers import CategorySerializer, PointSerializer, VisitedPointSerializer, CheckInSerializer, \
+    ArticleSerializer
 from drf_yasg.utils import swagger_auto_schema
 from geopy.distance import geodesic
 
@@ -128,3 +129,26 @@ class CheckInAPIView(APIView):
             user.save()
 
         return Response({"message": "Вы успешно отметились!", "new_level": user.level}, status=status.HTTP_200_OK)
+
+
+class ArticleDetailAPIView(generics.RetrieveUpdateAPIView):
+    queryset = Article.objects.all()
+    serializer_class = ArticleSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        if request.user.is_staff:
+            return super().put(request, *args, **kwargs)
+        else:
+            return Response({"detail": "You do not have permission to update this article."},
+                            status=status.HTTP_403_FORBIDDEN)
+
+    def patch(self, request, *args, **kwargs):
+        if request.user.is_staff:
+            return super().patch(request, *args, **kwargs)
+        else:
+            return Response({"detail": "You do not have permission to update this article."},
+                            status=status.HTTP_403_FORBIDDEN)

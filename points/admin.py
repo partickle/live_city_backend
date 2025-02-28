@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Point
+from .models import Category, Point, Article
 
 
 class CategoryAdmin(admin.ModelAdmin):
@@ -15,3 +15,4 @@ class PointAdmin(admin.ModelAdmin):
 
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Point, PointAdmin)
+admin.site.register(Article)

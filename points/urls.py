@@ -2,7 +2,7 @@ from django.urls import path
 from .views import (
     CategoryListAPIView, CategoryDetailAPIView,
     PointListAPIView, PointDetailAPIView,
-    CheckInAPIView, UserVisitedPointsAPIView
+    CheckInAPIView, UserVisitedPointsAPIView, ArticleDetailAPIView
 )
 
 urlpatterns = [
@@ -15,4 +15,5 @@ urlpatterns = [
     path('check-in/', CheckInAPIView.as_view(), name='check-in'),
     path('visited_points/', UserVisitedPointsAPIView.as_view(), name='visited_points'),
 
+    path('articles/<int:pk>/', ArticleDetailAPIView.as_view(), name='article-detail'),
 ]
