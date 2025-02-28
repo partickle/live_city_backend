@@ -9,15 +9,15 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class PointSerializer(serializers.ModelSerializer):
-    category = CategorySerializer()
+    category_id = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), source='category')
 
     class Meta:
         model = Point
-        fields = ['id', 'name', 'category', 'latitude', 'longitude', 'exp', 'is_active']
+        fields = ['id', 'name', 'category_id', 'latitude', 'longitude', 'exp', 'is_active']
 
     def create(self, validated_data):
-        category_data = validated_data.pop('category')
-        category = Category.objects.create(**category_data)
+        category_id = validated_data.pop('category').id
+        category = Category.objects.get(id=category_id)
         point = Point.objects.create(category=category, **validated_data)
         return point
 
