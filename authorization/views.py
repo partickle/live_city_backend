@@ -1,3 +1,4 @@
+from rest_framework.permissions import AllowAny
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
@@ -15,22 +16,60 @@ import random
 import string
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.permissions import IsAuthenticated
+from django.urls import reverse
 
 cache = cachetools.TTLCache(maxsize=100, ttl=600)
 
 
+class VerifyAccountView(APIView):
+    def get(self, request, user_id, *args, **kwargs):
+        try:
+            user = User.objects.get(user_id=user_id, is_active=False)
+            user.is_active = True
+            user.save()
+            return Response({"message": "Account activated successfully."}, status=status.HTTP_200_OK)
+        except User.DoesNotExist:
+            return Response({"error": "Invalid or expired link"}, status=status.HTTP_404_NOT_FOUND)
+
+
 class RegisterAPIView(generics.GenericAPIView):
     serializer_class = MyUserSerializer
+    permission_classes = [AllowAny]
 
     def post(self, request):
         serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            user = serializer.save()
-            return Response({
-                "user": MyUserSerializer(user).data,
-                "message": "User Created Successfully."
-            }, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+
+        refresh = RefreshToken.for_user(user)
+        user_data = MyUserSerializer(user, context={'request': request}).data
+
+        self.send_activation_email(user, request)
+
+        return Response({
+            "user": user_data,
+            "refresh": str(refresh),
+            "access": str(refresh.access_token),
+            "message": "User Registered. Activation email sent. Please activate your account."
+        }, status=status.HTTP_201_CREATED)
+
+    def send_activation_email(self, user, request):
+        activation_link = request.build_absolute_uri(reverse('verify-activation', args=[user.user_id]))
+        context = {
+            'user': user,
+            'activation_link': activation_link
+        }
+        html_content = render_to_string("activation_email.html", context)
+        text_content = strip_tags(html_content)
+
+        email_message = EmailMultiAlternatives(
+            'Activate Your Account',
+            text_content,
+            settings.DEFAULT_FROM_EMAIL,
+            [user.email]
+        )
+        email_message.attach_alternative(html_content, "text/html")
+        email_message.send()
 
 
 class LoginAPIView(generics.GenericAPIView):
