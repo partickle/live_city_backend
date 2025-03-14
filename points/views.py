@@ -19,7 +19,8 @@ class CategoryListAPIView(generics.ListCreateAPIView):
         if self.request.user.is_staff:
             serializer.save()
         else:
-            raise PermissionError("You do not have permission to create a category.")
+            return Response({"detail": "У вас нет прав на создание категории."},
+                            status=status.HTTP_403_FORBIDDEN)
 
 
 class CategoryDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
@@ -27,21 +28,18 @@ class CategoryDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CategorySerializer
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, *args, **kwargs):
-        return super().get(request, *args, **kwargs)
-
     def put(self, request, *args, **kwargs):
         if request.user.is_staff:
             return super().put(request, *args, **kwargs)
         else:
-            return Response({"detail": "You do not have permission to update this category."},
+            return Response({"detail": "У вас нет прав на обновление этой категории."},
                             status=status.HTTP_403_FORBIDDEN)
 
     def delete(self, request, *args, **kwargs):
         if request.user.is_staff:
             return super().delete(request, *args, **kwargs)
         else:
-            return Response({"detail": "You do not have permission to delete this category."},
+            return Response({"detail": "У вас нет прав на удаление этой категории."},
                             status=status.HTTP_403_FORBIDDEN)
 
 
@@ -54,7 +52,8 @@ class PointListAPIView(generics.ListCreateAPIView):
         if self.request.user.is_staff:
             serializer.save()
         else:
-            raise PermissionError("You do not have permission to create a point.")
+            return Response({"detail": "У вас нет прав на создание точки."},
+                            status=status.HTTP_403_FORBIDDEN)
 
 
 class PointDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
@@ -62,21 +61,18 @@ class PointDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = PointSerializer
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, *args, **kwargs):
-        return super().get(request, *args, **kwargs)
-
     def put(self, request, *args, **kwargs):
         if request.user.is_staff:
             return super().put(request, *args, **kwargs)
         else:
-            return Response({"detail": "You do not have permission to update this point."},
+            return Response({"detail": "У вас нет прав на обновление этой точки."},
                             status=status.HTTP_403_FORBIDDEN)
 
     def delete(self, request, *args, **kwargs):
         if request.user.is_staff:
             return super().delete(request, *args, **kwargs)
         else:
-            return Response({"detail": "You do not have permission to delete this point."},
+            return Response({"detail": "У вас нет прав на удаление этой точки."},
                             status=status.HTTP_403_FORBIDDEN)
 
 
@@ -118,12 +114,13 @@ class CheckInAPIView(APIView):
         distance = geodesic(user_location, point_location).meters
 
         if distance > 100:
-            return Response({"error": "Вы слишком далеко от точки"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": f"Вы слишком далеко от точки. Расстояние: {distance:.2f} метров"},
+                            status=status.HTTP_400_BAD_REQUEST)
 
         with transaction.atomic():
             visit, created = VisitedPoint.objects.get_or_create(user=user, point=point)
             if not created:
-                return Response({"message": "Вы уже отмечались в этой точке"}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"message": "Вы уже отмечались в этой точке"}, status=status.HTTP_200_OK)
 
             user.level += point.exp // 100
             user.save()
@@ -136,19 +133,16 @@ class ArticleDetailAPIView(generics.RetrieveUpdateAPIView):
     serializer_class = ArticleSerializer
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, *args, **kwargs):
-        return super().get(request, *args, **kwargs)
-
     def put(self, request, *args, **kwargs):
         if request.user.is_staff:
             return super().put(request, *args, **kwargs)
         else:
-            return Response({"detail": "You do not have permission to update this article."},
+            return Response({"detail": "У вас нет прав на обновление этой статьи."},
                             status=status.HTTP_403_FORBIDDEN)
 
     def patch(self, request, *args, **kwargs):
         if request.user.is_staff:
             return super().patch(request, *args, **kwargs)
         else:
-            return Response({"detail": "You do not have permission to update this article."},
+            return Response({"detail": "У вас нет прав на обновление этой статьи."},
                             status=status.HTTP_403_FORBIDDEN)

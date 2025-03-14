@@ -24,9 +24,17 @@ class PointSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         category_data = validated_data.pop('category', None)
         if category_data:
-            instance.category.name = category_data.get('name', instance.category.name)
-            instance.category.color = category_data.get('color', instance.category.color)
+            # Если category_data — это объект Category
+            if isinstance(category_data, Category):
+                instance.category.name = category_data.name
+                instance.category.color = category_data.color
+            # Если category_data — это словарь
+            elif isinstance(category_data, dict):
+                instance.category.name = category_data.get('name', instance.category.name)
+                instance.category.color = category_data.get('color', instance.category.color)
             instance.category.save()
+
+        # Обновляем остальные поля
         instance.name = validated_data.get('name', instance.name)
         instance.latitude = validated_data.get('latitude', instance.latitude)
         instance.longitude = validated_data.get('longitude', instance.longitude)
