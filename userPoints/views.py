@@ -31,10 +31,36 @@ class UserPointModerationAPIView(generics.UpdateAPIView):
                             status=status.HTTP_403_FORBIDDEN)
 
         instance = self.get_object()
-        instance.is_active = request.data.get('is_active', instance.is_active)
-        instance.save()
-        serializer = self.get_serializer(instance)
-        return Response(serializer.data)
+        is_active = request.data.get('is_active', None)
+
+        if is_active is not None:
+            instance.is_active = is_active
+            instance.save()
+            serializer = self.get_serializer(instance)
+            return Response(serializer.data)
+        else:
+            return Response({"detail": "Field 'is_active' is required."},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserPointDeleteAPIView(generics.DestroyAPIView):
+    queryset = UserPoint.objects.all()
+    serializer_class = UserPointSerializer
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(
+        operation_description="Delete a user point",
+        responses={204: "No Content", 403: "Forbidden", 404: "Not Found"}
+    )
+    def delete(self, request, *args, **kwargs):
+        if not request.user.is_staff:
+            return Response({"detail": "You do not have permission to delete points."},
+                            status=status.HTTP_403_FORBIDDEN)
+
+        instance = self.get_object()
+        instance.delete()
+        return Response({"message": "Point deleted successfully."},
+                        status=status.HTTP_204_NO_CONTENT)
 
 
 class UserPointListAPIView(generics.ListAPIView):
@@ -48,7 +74,10 @@ class UserPointListAPIView(generics.ListAPIView):
     )
     def get(self, request, *args, **kwargs):
         now = timezone.now()
+        # Удаляем точки, у которых истекло время
         UserPoint.objects.filter(end_time__lt=now).delete()
+
+        # Фильтрация по статусу is_active
         is_active = request.query_params.get('is_active', None)
         if is_active is not None:
             is_active = is_active.lower() == 'true'
