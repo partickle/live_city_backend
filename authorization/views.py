@@ -21,6 +21,27 @@ from django.urls import reverse
 cache = cachetools.TTLCache(maxsize=100, ttl=600)
 
 
+class UserProfileAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        user = request.user
+
+        user_data = MyUserSerializer(user, context={'request': request}).data
+
+        profile_data = {
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "experience": user.experience,
+            "level": user.level,
+            "email": user.email,
+        }
+
+        user_profile = {**user_data, **profile_data}
+
+        return Response(user_profile, status=status.HTTP_200_OK)
+
+
 class VerifyAccountView(APIView):
     def get(self, request, user_id, *args, **kwargs):
         try:

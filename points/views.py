@@ -125,10 +125,16 @@ class CheckInAPIView(APIView):
             if not created:
                 return Response({"message": "Вы уже отмечались в этой точке"}, status=status.HTTP_200_OK)
 
-            user.level += point.exp // 100
+            user.experience += point.exp
             user.save()
 
-        return Response({"message": "Вы успешно отметились!", "new_level": user.level}, status=status.HTTP_200_OK)
+            new_level = user.experience // 100
+            if new_level > user.level:
+                user.level = new_level
+                user.save()
+
+        return Response({"message": "Вы успешно отметились!", "new_level": user.level, "experience": user.experience},
+                        status=status.HTTP_200_OK)
 
 
 class ArticleDetailAPIView(generics.RetrieveUpdateAPIView):

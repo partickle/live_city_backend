@@ -5,7 +5,7 @@ from rest_framework_simplejwt.views import (
 )
 from authorization.views import (DeleteAccountView, ResetPasswordView, RegisterAPIView, LoginAPIView,
                                  SendVerificationCodeView, VerifyVerificationCodeView, AdminLoginAPIView,
-                                 UserListAPIView, UserDeactivateAPIView, VerifyAccountView)
+                                 UserListAPIView, UserDeactivateAPIView, VerifyAccountView, UserProfileAPIView)
 
 urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
@@ -22,4 +22,7 @@ urlpatterns = [
     path('users/<int:user_id>/deactivate/', UserDeactivateAPIView.as_view(), name='user-deactivate'),
 
     path('verify-activation/<int:user_id>/', VerifyAccountView.as_view(), name='verify-activation'),
+
+    path('profile/', UserProfileAPIView.as_view(), name='user-profile'),
+
 ]

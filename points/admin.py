@@ -9,7 +9,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 class PointAdmin(admin.ModelAdmin):
-    list_display = ('name', 'category', 'latitude', 'longitude', 'exp', 'is_active', 'image_preview')
+    list_display = ('id', 'name', 'category', 'latitude', 'longitude', 'exp', 'is_active', 'image_preview')
     list_filter = ('category', 'is_active')
     search_fields = ('name', 'category__name')
 
