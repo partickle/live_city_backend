@@ -12,6 +12,14 @@ class Category(models.Model):
         return self.name
 
 
+class Article(models.Model):
+    title = models.CharField(max_length=255)
+    content = models.TextField()
+
+    def __str__(self):
+        return self.title
+
+
 class Point(models.Model):
     name = models.CharField(max_length=255)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
@@ -20,18 +28,10 @@ class Point(models.Model):
     exp = models.IntegerField()
     is_active = models.BooleanField(default=True)
     image = models.ImageField(upload_to='point_images/', null=True, blank=True)
+    article = models.ForeignKey(Article, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.name
-
-
-class Article(models.Model):
-    title = models.CharField(max_length=255)
-    content = models.TextField()
-    point = models.ForeignKey('Point', on_delete=models.CASCADE, related_name='articles')
-
-    def __str__(self):
-        return self.title
 
 
 class VisitedPoint(models.Model):

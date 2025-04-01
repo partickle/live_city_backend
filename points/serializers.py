@@ -10,19 +10,21 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class PointSerializer(serializers.ModelSerializer):
     category_id = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), source='category')
+    article_id = serializers.PrimaryKeyRelatedField(queryset=Article.objects.all(), source='article', required=False, allow_null=True)
 
     class Meta:
         model = Point
-        fields = ['id', 'name', 'category_id', 'latitude', 'longitude', 'exp', 'is_active', 'image']
+        fields = ['id', 'name', 'category_id', 'latitude', 'longitude', 'exp', 'is_active', 'image', 'article_id']
 
     def create(self, validated_data):
-        category_id = validated_data.pop('category').id
-        category = Category.objects.get(id=category_id)
-        point = Point.objects.create(category=category, **validated_data)
+        category = validated_data.pop('category')
+        article = validated_data.pop('article', None)
+        point = Point.objects.create(category=category, article=article, **validated_data)
         return point
 
     def update(self, instance, validated_data):
         category_data = validated_data.pop('category', None)
+        article_data = validated_data.pop('article', None)
         if category_data:
             # Если category_data — это объект Category
             if isinstance(category_data, Category):
@@ -34,7 +36,9 @@ class PointSerializer(serializers.ModelSerializer):
                 instance.category.color = category_data.get('color', instance.category.color)
             instance.category.save()
 
-        # Обновляем остальные поля
+        if article_data:
+            instance.article = article_data
+
         instance.name = validated_data.get('name', instance.name)
         instance.latitude = validated_data.get('latitude', instance.latitude)
         instance.longitude = validated_data.get('longitude', instance.longitude)
@@ -44,18 +48,16 @@ class PointSerializer(serializers.ModelSerializer):
         return instance
 
     def to_representation(self, instance):
-        """Добавление полного URL для изображения"""
-        representation = super().to_representation(instance)
-        request = self.context.get('request')
-        if instance.image and request:
-            representation['image'] = request.build_absolute_uri(instance.image.url)
-        return representation
+        data = super().to_representation(instance)
+        if data.get("image"):
+            data["image"] = instance.image.url
+        return data
 
 
 class ArticleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article
-        fields = ['id', 'title', 'content', 'point']
+        fields = ['id', 'title', 'content']
 
 
 class CheckInSerializer(serializers.Serializer):

@@ -4,8 +4,16 @@ from django.utils.html import format_html
 
 
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'color')
+    list_display = ('name', 'color_display')
     search_fields = ('name',)
+
+    def color_display(self, obj):
+        return format_html(
+            '<span style="display:inline-block;width:20px;height:20px;background-color:{};border:1px solid #000;"></span> {}',
+            obj.color, obj.color
+        )
+
+    color_display.short_description = "Цвет"
 
 
 class PointAdmin(admin.ModelAdmin):
