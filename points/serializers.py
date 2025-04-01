@@ -13,7 +13,7 @@ class PointSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Point
-        fields = ['id', 'name', 'category_id', 'latitude', 'longitude', 'exp', 'is_active']
+        fields = ['id', 'name', 'category_id', 'latitude', 'longitude', 'exp', 'is_active', 'image']
 
     def create(self, validated_data):
         category_id = validated_data.pop('category').id
@@ -42,6 +42,14 @@ class PointSerializer(serializers.ModelSerializer):
         instance.is_active = validated_data.get('is_active', instance.is_active)
         instance.save()
         return instance
+
+    def to_representation(self, instance):
+        """Добавление полного URL для изображения"""
+        representation = super().to_representation(instance)
+        request = self.context.get('request')
+        if instance.image and request:
+            representation['image'] = request.build_absolute_uri(instance.image.url)
+        return representation
 
 
 class ArticleSerializer(serializers.ModelSerializer):

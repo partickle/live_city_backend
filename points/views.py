@@ -8,6 +8,7 @@ from .serializers import CategorySerializer, PointSerializer, VisitedPointSerial
     ArticleSerializer
 from drf_yasg.utils import swagger_auto_schema
 from geopy.distance import geodesic
+from rest_framework.parsers import MultiPartParser, FormParser
 
 
 class CategoryListAPIView(generics.ListCreateAPIView):
@@ -47,6 +48,7 @@ class PointListAPIView(generics.ListCreateAPIView):
     queryset = Point.objects.all()
     serializer_class = PointSerializer
     permission_classes = [IsAuthenticated]
+    parser_classes = (MultiPartParser, FormParser)
 
     def perform_create(self, serializer):
         if self.request.user.is_staff:
@@ -60,6 +62,7 @@ class PointDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Point.objects.all()
     serializer_class = PointSerializer
     permission_classes = [IsAuthenticated]
+    parser_classes = (MultiPartParser, FormParser)
 
     def put(self, request, *args, **kwargs):
         if request.user.is_staff:

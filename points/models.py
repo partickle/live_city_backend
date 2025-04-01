@@ -19,6 +19,7 @@ class Point(models.Model):
     longitude = models.DecimalField(max_digits=9, decimal_places=6)
     exp = models.IntegerField()
     is_active = models.BooleanField(default=True)
+    image = models.ImageField(upload_to='point_images/', null=True, blank=True)
 
     def __str__(self):
         return self.name
