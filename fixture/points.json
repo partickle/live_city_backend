@@ -1,112 +1,141 @@
-[
-  {
-    "model": "points.point",
-    "pk": 1,
-    "fields": {
-      "name": "Площадь Ленина",
-      "latitude": 51.6602,
-      "longitude": 39.1962,
-      "exp": 10,
-      "category": 1
-    }
-  },
-  {
-    "model": "points.point",
-    "pk": 2,
-    "fields": {
-      "name": "Парк Победы",
-      "latitude": 51.6525,
-      "longitude": 39.2167,
-      "exp": 15,
-      "category": 1
-    }
-  },
-  {
-    "model": "points.point",
-    "pk": 3,
-    "fields": {
-      "name": "Костёлы Воронежа",
-      "latitude": 51.6642,
-      "longitude": 39.1881,
-      "exp": 12,
-      "category": 2
-    }
-  },
-  {
-    "model": "points.point",
-    "pk": 4,
-    "fields": {
-      "name": "Воронежский государственный цирк",
-      "latitude": 51.6666,
-      "longitude": 39.1899,
-      "exp": 20,
-      "category": 3
-    }
-  },
-  {
-    "model": "points.point",
-    "pk": 5,
-    "fields": {
-      "name": "Дворец культуры железнодорожников",
-      "latitude": 51.6704,
-      "longitude": 39.2008,
-      "exp": 18,
-      "category": 2
-    }
-  },
-  {
-    "model": "points.point",
-    "pk": 6,
-    "fields": {
-      "name": "Воронежский океанариум",
-      "latitude": 51.6495,
-      "longitude": 39.1932,
-      "exp": 25,
-      "category": 3
-    }
-  },
-  {
-    "model": "points.point",
-    "pk": 7,
-    "fields": {
-      "name": "Памятник Петру I",
-      "latitude": 51.6608,
-      "longitude": 39.2005,
-      "exp": 30,
-      "category": 1
-    }
-  },
-  {
-    "model": "points.point",
-    "pk": 8,
-    "fields": {
-      "name": "Соборная площадь",
-      "latitude": 51.6667,
-      "longitude": 39.1944,
-      "exp": 8,
-      "category": 2
-    }
-  },
-  {
-    "model": "points.point",
-    "pk": 9,
-    "fields": {
-      "name": "Воронежский музей изобразительных искусств",
-      "latitude": 51.6709,
-      "longitude": 39.1927,
-      "exp": 22,
-      "category": 3
-    }
-  },
-  {
-    "model": "points.point",
-    "pk": 10,
-    "fields": {
-      "name": "Площадь Революции",
-      "latitude": 51.6667,
-      "longitude": 39.1935,
-      "exp": 5,
-      "category": 1
-    }
+[{
+  "model": "points.point",
+  "pk": 1,
+  "fields": {
+    "name": "Площадь Ленина",
+    "category": 1,
+    "latitude": 51.6600,
+    "longitude": 39.2000,
+    "exp": 100,
+    "is_active": true,
+    "image": null,
+    "article": 1
   }
+},
+{
+  "model": "points.point",
+  "pk": 2,
+  "fields": {
+    "name": "Парк Победы",
+    "category": 3,
+    "latitude": 51.6400,
+    "longitude": 39.2200,
+    "exp": 120,
+    "is_active": true,
+    "image": null,
+    "article": 2
+  }
+},
+{
+  "model": "points.point",
+  "pk": 3,
+  "fields": {
+    "name": "Костёл",
+    "category": 2,
+    "latitude": 51.6700,
+    "longitude": 39.1900,
+    "exp": 90,
+    "is_active": true,
+    "image": null,
+    "article": 3
+  }
+},
+{
+  "model": "points.point",
+  "pk": 4,
+  "fields": {
+    "name": "Воронежский цирк",
+    "category": 2,
+    "latitude": 51.6650,
+    "longitude": 39.2100,
+    "exp": 110,
+    "is_active": true,
+    "image": null,
+    "article": 4
+  }
+},
+{
+  "model": "points.point",
+  "pk": 5,
+  "fields": {
+    "name": "Дворец культуры",
+    "category": 2,
+    "latitude": 51.6550,
+    "longitude": 39.2050,
+    "exp": 105,
+    "is_active": true,
+    "image": null,
+    "article": 5
+  }
+},
+{
+  "model": "points.point",
+  "pk": 6,
+  "fields": {
+    "name": "Океанариум",
+    "category": 3,
+    "latitude": 51.6800,
+    "longitude": 39.2300,
+    "exp": 130,
+    "is_active": true,
+    "image": null,
+    "article": 6
+  }
+},
+{
+  "model": "points.point",
+  "pk": 7,
+  "fields": {
+    "name": "Памятник Петру I",
+    "category": 1,
+    "latitude": 51.6500,
+    "longitude": 39.1800,
+    "exp": 95,
+    "is_active": true,
+    "image": null,
+    "article": 7
+  }
+},
+{
+  "model": "points.point",
+  "pk": 8,
+  "fields": {
+    "name": "Соборная площадь",
+    "category": 1,
+    "latitude": 51.6620,
+    "longitude": 39.2020,
+    "exp": 102,
+    "is_active": true,
+    "image": null,
+    "article": 8
+  }
+},
+{
+  "model": "points.point",
+  "pk": 9,
+  "fields": {
+    "name": "Музей искусств",
+    "category": 2,
+    "latitude": 51.6750,
+    "longitude": 39.2150,
+    "exp": 115,
+    "is_active": true,
+    "image": null,
+    "article": 9
+  }
+},
+{
+  "model": "points.point",
+  "pk": 10,
+  "fields": {
+    "name": "Площадь Революции",
+    "category": 1,
+    "latitude": 51.6450,
+    "longitude": 39.1950,
+    "exp": 98,
+    "is_active": true,
+    "image": null,
+    "article": 10
+  }
+}
 ]

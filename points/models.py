@@ -22,13 +22,13 @@ class Article(models.Model):
 
 class Point(models.Model):
     name = models.CharField(max_length=255)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="points")
     latitude = models.DecimalField(max_digits=9, decimal_places=6)
     longitude = models.DecimalField(max_digits=9, decimal_places=6)
     exp = models.IntegerField()
     is_active = models.BooleanField(default=True)
     image = models.ImageField(upload_to='point_images/', null=True, blank=True)
-    article = models.ForeignKey(Article, on_delete=models.CASCADE, null=True, blank=True)
+    article = models.ForeignKey(Article, on_delete=models.CASCADE, null=True, blank=True, related_name="points")
 
     def __str__(self):
         return self.name

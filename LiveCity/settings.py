@@ -33,9 +33,9 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 DEBUG = True
 
 
-ALLOWED_HOSTS = ['*']
-CSRF_TRUSTED_ORIGINS = ['https://moistly-triumphant-cuttlefish.cloudpub.ru']
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+ALLOWED_HOSTS = ['77.239.98.89', 'localhost', '127.0.0.1']
+CSRF_TRUSTED_ORIGINS = ['http://77.239.98.89']
+SECURE_PROXY_SSL_HEADER = None
 
 
 
@@ -125,7 +125,7 @@ DATABASES = {
         'NAME': 'LiveCity',
         'USER': 'postgres',
         'PASSWORD': os.getenv('PASSWORD_DB'),
-        'HOST': 'localhost',
+        'HOST': 'db',
         'PORT': '5432',
     }
 }
@@ -216,7 +216,8 @@ EMAIL_USE_TLS = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
