@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.timezone import now
+from django_prometheus.models import ExportModelOperationsMixin
 
 from authorization.models import User
 
@@ -20,7 +21,7 @@ class Article(models.Model):
         return self.title
 
 
-class Point(models.Model):
+class Point(ExportModelOperationsMixin('point'), models.Model):
     name = models.CharField(max_length=255)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="points")
     latitude = models.DecimalField(max_digits=9, decimal_places=6)

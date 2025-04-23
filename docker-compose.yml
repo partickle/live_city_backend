@@ -24,6 +24,7 @@ services:
     volumes:
       - static_volume:/app/static
       - media_volume:/app/media
+      - ./logs:/app/logs
     ports:
       - "8000:8000"
     networks:
@@ -43,6 +44,53 @@ services:
     networks:
       - backend
 
+  loki:
+    image: grafana/loki:2.9.1
+    user: "0:0"
+    command: -config.file=/etc/loki/loki-config.yaml
+    volumes:
+      - ./loki-config.yaml:/etc/loki/loki-config.yaml
+      - ./loki:/loki 
+    ports:
+      - "3100:3100"
+    networks:
+      - backend
+
+  grafana:
+    image: grafana/grafana:latest
+    restart: always
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    depends_on:
+      - loki
+    networks:
+      - backend
+
+  promtail:
+    image: grafana/promtail:latest
+    command: -config.file=/etc/promtail/promtail.yaml
+    volumes:
+      - ./promtail-config.yaml:/etc/promtail/promtail.yaml
+      - ./logs:/app/logs
+      - /var/log:/var/log
+    networks:
+      - backend
+
+  prometheus:
+    image: prom/prometheus:v2.45.0
+    restart: always
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    networks:
+      - backend
+
 networks:
   backend:
     driver: bridge
@@ -51,3 +99,5 @@ volumes:
   postgres_data:
   static_volume:
   media_volume:
+  grafana_data:
+  prometheus_data:

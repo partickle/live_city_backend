@@ -9,6 +9,9 @@ from .serializers import CategorySerializer, PointSerializer, VisitedPointSerial
 from drf_yasg.utils import swagger_auto_schema
 from geopy.distance import geodesic
 from rest_framework.parsers import MultiPartParser, FormParser
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class CategoryListAPIView(generics.ListCreateAPIView):
@@ -50,10 +53,17 @@ class PointListAPIView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
     parser_classes = (MultiPartParser, FormParser)
 
+    def get(self, request, *args, **kwargs):
+        logger.info(f"User {request.user.pk} ({request.user.email}) requested point list.")
+        return super().get(request, *args, **kwargs)
+
     def perform_create(self, serializer):
-        if self.request.user.is_staff:
-            serializer.save()
+        user = self.request.user
+        if user.is_staff:
+            point = serializer.save()
+            logger.info(f"Admin {user.pk} ({user.email}) created point {point.id} - {point.name}.")
         else:
+            logger.warning(f"User {user.pk} ({user.email}) attempted to create point without permission.")
             return Response({"detail": "У вас нет прав на создание точки."},
                             status=status.HTTP_403_FORBIDDEN)
 
