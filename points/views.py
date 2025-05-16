@@ -152,6 +152,18 @@ class ArticleDetailAPIView(generics.RetrieveUpdateAPIView):
     serializer_class = ArticleSerializer
     permission_classes = [IsAuthenticated]
 
+    def post(self, request, *args, **kwargs):
+        if not request.user.is_staff:
+            return Response(
+                {"detail": "У вас нет прав на создание статьи."},
+                status=status.HTTP_403_FORBIDDEN
+            )
+            
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
     def put(self, request, *args, **kwargs):
         if request.user.is_staff:
             return super().put(request, *args, **kwargs)

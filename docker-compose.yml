@@ -22,6 +22,7 @@ services:
       - db
     env_file: .env
     volumes:
+      - .:/app
       - static_volume:/app/static
       - media_volume:/app/media
       - ./logs:/app/logs
