@@ -10,8 +10,8 @@ from authorization.views import (DeleteAccountView, ResetPasswordView, RegisterA
 urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('send-activation/', SendVerificationCodeView.as_view(), name='send-activation-code'),
-    path('verify/', VerifyVerificationCodeView.as_view(), name='verify-activation-code'),
+    path('send-verification/', SendVerificationCodeView.as_view(), name='send-verification-code'),
+    path('verify/', VerifyVerificationCodeView.as_view(), name='verify-verification-code'),
     path('register/', RegisterAPIView.as_view(), name='register'),
     path('login/', LoginAPIView.as_view(), name='login'),
     path('admin/login/', AdminLoginAPIView.as_view(), name='admin_login'),

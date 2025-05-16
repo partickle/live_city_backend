@@ -17,8 +17,7 @@ import string
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.permissions import IsAuthenticated
 from django.urls import reverse
-
-cache = cachetools.TTLCache(maxsize=100, ttl=600)
+from django.core.cache import cache
 
 
 class UserProfileAPIView(APIView):
@@ -124,7 +123,7 @@ class SendVerificationCodeView(APIView):
             return Response({"error": "User with this email does not exist"}, status=status.HTTP_404_NOT_FOUND)
 
         code = ''.join(random.choice(string.digits) for _ in range(6))
-        cache[user.email] = code
+        cache.set(email, code, timeout=600)
 
         context = {'code': code, 'user': user}
         html_content = render_to_string('verification_email.html', context)
@@ -150,12 +149,13 @@ class VerifyVerificationCodeView(APIView):
         email = serializer.validated_data['email']
         code = serializer.validated_data['code']
 
-        if email not in cache:
+        cached_code = cache.get(email)
+        if not cached_code:
             return Response({"error": "Verification code has expired."}, status=status.HTTP_400_BAD_REQUEST)
-        if cache[email] != code:
+        if cached_code != code:
             return Response({"error": "Invalid verification code."}, status=status.HTTP_400_BAD_REQUEST)
 
-        del cache[email]
+        cache.delete(email)
         return Response({"message": "Verification code is valid."}, status=status.HTTP_200_OK)
 
 

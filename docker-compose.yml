@@ -92,6 +92,15 @@ services:
     networks:
       - backend
 
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+    networks:
+      - backend 
+
 networks:
   backend:
     driver: bridge
@@ -102,3 +111,4 @@ volumes:
   media_volume:
   grafana_data:
   prometheus_data:
+  redisdata:
